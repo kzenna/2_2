@@ -46,7 +46,7 @@ for users in list_friends_user:
         else:
             True
     except VKTimeError:
-        None
+        print('VKTimeError')
     else:
         # print(data)
         data_groups_list = data["response"]["items"]
