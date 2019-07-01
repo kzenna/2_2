@@ -1,5 +1,14 @@
 import requests
 import time
+import json
+
+
+class VKpers(object):
+    def __init__(self, id, photo1, photo2, photo3):
+        self.ids = id
+        self.photo_1 = photo1
+        self.photo_1 = photo2
+        self.photo_3 = photo3
 
 
 class VKTimeError(Exception):
@@ -22,15 +31,15 @@ params_user = {
 params_search = {
     'v': '5.95',
     'sex': '2',
-    'age_from': '50',
-    'age_to': '65',
-    'count': '20',
+    'age_from': '30',
+    'age_to': '40',
+    'count': '11',
     'city': '1',
     'country': '1',
     'sort': '0',
     'access_token': TOKEN,
     'user_id': user_id,
-    'fields': 'books, music, movies, interests'
+    'fields': 'books, music, movies, interests, photo_200_orig, photo_400_orig,photo_max_orig, domain'
     }
 
 search_user = 'https://api.vk.com/method/users.search'
@@ -96,4 +105,14 @@ for user in list_id_users:
     if DEBUG_MODE:
         print(data_groups_list)
     dict_groups_users.update({user: data_groups_list})
-    print("\t Найденные пользователи: {0}\n".format(data_groups_list))
+data_list_json = []
+# сбор json
+for id_s in list_id_users:
+    for ids in data_search["response"]["items"]:
+        if id_s == ids["id"]:
+            tmp = VKpers(ids["domain"],
+                         ids["photo_200_orig"],
+                         ids["photo_400_orig"],
+                         ids["photo_max_orig"])
+            data_list_json.append(json.dumps(tmp.__dict__))
+print("\t Найденные пользователи: {0}\n".format(data_list_json))
